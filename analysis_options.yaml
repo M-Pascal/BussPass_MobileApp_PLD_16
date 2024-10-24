@@ -1,0 +1,8 @@
+include: package:flutter_lints/flutter.yaml
+# Additional configuration can go here
+
+linter:
+  # producing the lint.
+
+  rules:
+    
