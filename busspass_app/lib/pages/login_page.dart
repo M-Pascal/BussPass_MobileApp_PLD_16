@@ -199,6 +199,7 @@ class _LoginPageState extends State<LoginPage> {
                     if (_formKey.currentState?.validate() ?? false) {
                       // Perform login action if form is valid
                     }
+                    Navigator.push(context, route)
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.blue[900], // Button color
