@@ -1,3 +1,4 @@
+import 'package:busspass_app/pages/menu_screen.dart';
 import 'package:flutter/material.dart';
 
 // void main() => runApp(ProfileApp());
@@ -61,6 +62,10 @@ class _ProfilePageState extends State<ProfilePage> {
             IconButton(
               icon: const Icon(Icons.menu, color: Colors.white),
               onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context)=> const BusspassHome())
+                );
                 // Open a menu or handle other functionality
               },
             ),
