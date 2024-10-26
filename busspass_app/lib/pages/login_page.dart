@@ -1,3 +1,5 @@
+import 'package:busspass_app/main.dart';
+import 'package:busspass_app/pages/home_screen.dart';
 import 'package:flutter/material.dart';
 
 class LoginPage extends StatefulWidget {
@@ -199,7 +201,10 @@ class _LoginPageState extends State<LoginPage> {
                     if (_formKey.currentState?.validate() ?? false) {
                       // Perform login action if form is valid
                     }
-                    Navigator.push(context, route)
+                    Navigator.push(context,
+                    MaterialPageRoute(builder: (context)=> const MainScreen()
+                    )
+                    );
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.blue[900], // Button color

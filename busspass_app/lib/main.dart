@@ -1,3 +1,4 @@
+import 'package:busspass_app/pages/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'pages/booking.dart';
 import 'pages/login_page.dart'; // Import the login page
@@ -30,7 +31,7 @@ class _MainScreenState extends State<MainScreen> {
 
   // Define the pages for each BottomNavigationBar item
   static const List<Widget> _pages = <Widget>[
-    Center(child: Text('Home Page')),
+    HomeScreen(),
     Booking(),
     Center(child: Text('Tickets Page')),
     LoginPage(), // Navigate to LoginPage when Profile is tapped
