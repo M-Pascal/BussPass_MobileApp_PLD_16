@@ -2,7 +2,8 @@ import 'package:busspass_app/pages/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'pages/booking.dart';
 import 'pages/login_page.dart';
-import 'pages/tickets_screen.dart';// Import the login page
+import 'pages/tickets_screen.dart';
+import 'pages/profile_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -35,7 +36,7 @@ class _MainScreenState extends State<MainScreen> {
     HomeScreen(),
     Booking(),
     TicketHistoryScreen(),
-    LoginPage(), // Navigate to LoginPage when Profile is tapped
+    ProfilePage(), // Navigate to LoginPage when Profile is tapped
   ];
 
   void _onItemTapped(int index) {
