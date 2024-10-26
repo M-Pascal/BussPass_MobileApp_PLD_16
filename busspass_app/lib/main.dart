@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'screens/root_screen.dart';
+import 'pages/root_screen.dart';
 import 'config/theme.dart';
 void main() {
   runApp(const BussPassApp());
