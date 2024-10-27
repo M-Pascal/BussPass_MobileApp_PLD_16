@@ -33,7 +33,8 @@ class Ticket {
 }
 
 class TicketHistoryScreen extends StatefulWidget {
-  const TicketHistoryScreen({super.key});
+  final bool showPopUpOnLoad;
+  const TicketHistoryScreen({super.key, this.showPopUpOnLoad = false});
 
   @override
   _TicketHistoryScreenState createState() => _TicketHistoryScreenState();
@@ -139,6 +140,12 @@ class _TicketHistoryScreenState extends State<TicketHistoryScreen> {
   void initState() {
     super.initState();
     filteredTickets = tickets;
+    if (widget.showPopUpOnLoad) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _buildTicketDetailsPopup(tickets[0]);
+      });
+    }
+
   }
 
   void _filterTickets(String query) {
@@ -152,9 +159,10 @@ class _TicketHistoryScreenState extends State<TicketHistoryScreen> {
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.blue,
+        backgroundColor: Colors.blue[900],
         title: const Center(
           child: Text(
             "Tickets",
@@ -259,12 +267,8 @@ class _TicketHistoryScreenState extends State<TicketHistoryScreen> {
           Container(
             width: 100,
             height: 80,
-            color: const Color.fromARGB(206, 0, 0, 0),
             child: const Center(
-              child: Text(
-                'QR CODE',
-                style: TextStyle(color: Colors.white),
-              ),
+              child: Image(image: AssetImage('assets/QR code.jpg')),
             ),
           ),
           const SizedBox(height: 20),
@@ -318,12 +322,12 @@ class TicketCard extends StatelessWidget {
   final VoidCallback onViewDetails;
 
   const TicketCard({
-    Key? key,
+    super.key,
     required this.ticketNo,
     required this.date,
     required this.time,
     required this.onViewDetails,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

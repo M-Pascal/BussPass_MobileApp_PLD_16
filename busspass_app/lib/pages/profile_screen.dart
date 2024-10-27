@@ -35,7 +35,7 @@ class _ProfilePageState extends State<ProfilePage> {
       appBar: PreferredSize(
         preferredSize: const Size(390, 99),
         child: AppBar(
-          backgroundColor: Colors.blue,
+          backgroundColor: Colors.blue[900],
           title: const Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -78,7 +78,7 @@ class _ProfilePageState extends State<ProfilePage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(height: 127),
+              const SizedBox(height: 27),
 
               // Profile Picture Section
               Center(

@@ -6,120 +6,117 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('BussPass'),
-        elevation: 0,
-      ),
-      body: SingleChildScrollView(
+      body: SafeArea(
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Weather Section
+            // App Bar with Search
             Container(
               padding: const EdgeInsets.all(16),
-              margin: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(12),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey.withOpacity(0.1),
-                    spreadRadius: 1,
-                    blurRadius: 5,
-                  ),
-                ],
-              ),
+              color: const Color(0xFF1565C0), // BussPass blue color
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
                   const Text(
-                    'Weather Forecast',
+                    'BussPass',
                     style: TextStyle(
-                      fontSize: 18,
+                      color: Colors.white,
+                      fontSize: 24,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  const SizedBox(height: 16),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      _buildWeatherItem('Kigali', '28°C', Icons.wb_sunny),
-                      _buildWeatherItem('Bugesera', '32°C', Icons.cloud),
-                    ],
+                  IconButton(
+                    icon: const Icon(Icons.menu, color: Colors.white),
+                    onPressed: () {},
                   ),
                 ],
+              ),
+              const SizedBox(height: 8),
+              const Text(
+                'Travel when its convenient for you',
+              style: TextStyle(
+              color: Colors.white70,
+                fontSize: 14,
               ),
             ),
-
-            // Upcoming Buses Section
-            Padding(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    'Upcoming Buses',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  _buildBusCard(
-                    'Bus 001',
-                    'Nyabugogo → Rwamagana',
-                    '8:00 AM',
-                    'RITCO Ltd.',
-                  ),
-                  const SizedBox(height: 12),
-                  _buildBusCard(
-                    'Bus 002',
-                    'Nyabugogo → Bugesera',
-                    '9:00 AM',
-                    'RITCO Ltd.',
-                  ),
-                ],
+            const SizedBox(height: 16),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: const TextField(
+                decoration: InputDecoration(
+                  hintText: 'Where to...',
+                  border: InputBorder.none,
+                  suffixIcon: Icon(Icons.search),
+                ),
               ),
             ),
           ],
         ),
       ),
-    );
-  }
 
-  Widget _buildWeatherItem(String location, String temp, IconData icon) {
-    return Column(
-      children: [
-        Icon(icon, size: 40, color: Colors.blue),
-        const SizedBox(height: 8),
-        Text(
-          temp,
-          style: const TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
+      // Explore Section
+      Expanded(
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  'Explore',
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                const Text(
+                  'Plan your future trip by region',
+                  style: TextStyle(
+                    color: Colors.grey,
+                    fontSize: 14,
+                  ),
+                ),
+                const SizedBox(height: 16),
+                _buildExploreCard(
+                  'North',
+                  'Book your next trip to the North.\nMissing Someone? Visit them',
+                  'assets/North.jpg',
+                ),
+                const SizedBox(height: 16),
+                _buildExploreCard(
+                  'East',
+                  'Feeling adventurous today?\nWho knows what you can find on the road',
+                  'assets/South.webp',
+                ),
+                const SizedBox(height: 16),
+                _buildExploreCard(
+                  'West',
+                  'Explore the western region',
+                  'assets/West.jpeg',
+                ),
+              ],
+            ),
           ),
         ),
-        Text(
-          location,
-          style: const TextStyle(
-            color: Colors.grey,
-          ),
-        ),
+      ),
       ],
+    ),
+    ),
     );
   }
 
-  Widget _buildBusCard(
-      String busNumber,
-      String route,
-      String time,
-      String company,
-      ) {
+  Widget _buildExploreCard(String title, String description, String imagePath) {
     return Container(
-      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(16),
         color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
             color: Colors.grey.withOpacity(0.1),
@@ -128,50 +125,55 @@ class HomeScreen extends StatelessWidget {
           ),
         ],
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                busNumber,
-                style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16,
-                ),
-              ),
-              Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 12,
-                  vertical: 4,
-                ),
-                decoration: BoxDecoration(
-                  color: Colors.blue,
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: const Text(
-                  'Book Now',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 12,
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(16),
+        child: Stack(
+          children: [
+            // Image(image: AssetImage('assets/North.jpg'))
+            Image.asset(
+              imagePath,
+              height: 200,
+              width: double.infinity,
+              fit: BoxFit.cover,
+            ),
+            Positioned(
+              bottom: 0,
+              left: 0,
+              right: 0,
+              child: Container(
+                padding: const EdgeInsets.all(16),
+                decoration: const BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.bottomCenter,
+                    end: Alignment.topCenter,
+                    colors: [Colors.black87, Colors.transparent],
                   ),
                 ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      title,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      description,
+                      style: const TextStyle(
+                        color: Colors.white70,
+                        fontSize: 14,
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ],
-          ),
-          const SizedBox(height: 8),
-          Text(route),
-          const SizedBox(height: 4),
-          Text(
-            'Departure: $time',
-            style: const TextStyle(color: Colors.grey),
-          ),
-          Text(
-            'Company: $company',
-            style: const TextStyle(color: Colors.grey),
-          ),
-        ],
+            ),
+          ],
+        ),
       ),
     );
   }

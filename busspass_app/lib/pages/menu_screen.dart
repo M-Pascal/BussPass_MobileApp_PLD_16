@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+
+
 // import 'package:google_fonts/google_fonts.dart';
 
 // void main() {
@@ -22,6 +24,7 @@ import 'package:flutter/material.dart';
 // ignore: use_key_in_widget_constructors
 class BusspassHome extends StatelessWidget {
   const BusspassHome({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -97,55 +100,7 @@ class BusspassHome extends StatelessWidget {
                         ListTile(
                           title: const Center(
                             child: Text(
-                              'Home',
-                              style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black,
-                              ),
-                            ),
-                          ),
-                          onTap: () {
-                            // Navigate to Home screen
-                          },
-                        ),
-                        const Divider(),
-                        ListTile(
-                          title: const Center(
-                            child: Text(
-                              'Explore',
-                              style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black,
-                              ),
-                            ),
-                          ),
-                          onTap: () {
-                            // Navigate to Explore screen
-                          },
-                        ),
-                        const Divider(),
-                        ListTile(
-                          title: const Center(
-                            child: Text(
-                              'Tickets',
-                              style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black,
-                              ),
-                            ),
-                          ),
-                          onTap: () {
-                            // Navigate to Tickets screen
-                          },
-                        ),
-                        const Divider(),
-                        ListTile(
-                          title: const Center(
-                            child: Text(
-                              'Profile',
+                              'Profile Settings',
                               style: TextStyle(
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold,
@@ -155,7 +110,10 @@ class BusspassHome extends StatelessWidget {
                           ),
                           onTap: () {
                             // Navigate to Profile screen
-                            Navigator.pushNamed(context, '/profile');
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context)=>const ProfileScreen())
+                            );
                           },
                         ),
                         const Divider(),
@@ -321,16 +279,17 @@ class ProfileScreen extends StatelessWidget {
                       actions: [
                         TextButton(
                           onPressed: () {
-                            Navigator.of(context).pop(); // Close the dialog
+                            Navigator.pop(context);// Close the dialog
                           },
                           child: const Text('Cancel'),
                         ),
                         TextButton(
                           onPressed: () {
-                            // Perform account deletion logic here
-                            Navigator.of(context).pop(); // Close dialog
-                            Navigator.of(context).pop(); // Return to home
+                            int count = 0;
+                            Navigator.of(context).popUntil((route) => count++ == 4);
+                            // Perform account deletion logic hereL
                           },
+
                           child: const Text('Delete'),
                         ),
                       ],
