@@ -498,7 +498,7 @@ Widget _getWeatherIcon(String condition) {
               'Luggage Qty.': '2',
             }),
             SizedBox(height: 20),
-            Text('Total fare: ----- rwf'),
+            Text('Total fare: 5000 Rwf'),
           ],
         ),
         actions: [
