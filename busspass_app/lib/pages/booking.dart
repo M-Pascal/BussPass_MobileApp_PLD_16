@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'tickets_screen.dart';
 
 
 class Booking extends StatefulWidget {
@@ -334,9 +335,7 @@ Widget _getWeatherIcon(String condition) {
                                           SizedBox(
                                             width: double.infinity,
                                             child: ElevatedButton.icon(
-                                              onPressed: () {
-                                                // Button action
-                                              },
+                                              onPressed: _showBookingDialog,
                                               style: ElevatedButton.styleFrom(
                                                 backgroundColor: Colors.blue,
                                                 shape: RoundedRectangleBorder(
@@ -471,6 +470,93 @@ Widget _getWeatherIcon(String condition) {
           ),
         ),
       ),
+    );
+  }
+  void _showBookingDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+          title: const Center(child: Text('Booking')),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              _buildInfoSection('Bus Information', {
+                'Company name': 'Kigali Coach',
+                'Plate No.': 'RAE256F',
+                'From': 'Nyabugogo bus station',
+                'To': 'Musanze',
+                'Departure time': '08:00 a.m',
+              }),
+              const SizedBox(height: 10),
+              _buildInfoSection('Personal Information', {
+                'Passenger name': 'John Doe',
+                'Number of sits': '1',
+                'Luggage Qty.': '2',
+              }),
+              const SizedBox(height: 20),
+              const Text('Total fare: 5000 Rwf'),
+            ],
+          ),
+          actions: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                TextButton(
+                  style: TextButton.styleFrom(
+                    backgroundColor: Colors.blue,
+                    foregroundColor: Colors.white,
+                  ),
+                  onPressed: (){
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context)=> const TicketHistoryScreen())
+                    );
+                  },
+                  child: const Text('Generate'),
+                ),
+                TextButton(
+                  style: TextButton.styleFrom(
+                    backgroundColor: Colors.red,
+                    foregroundColor: Colors.white,
+                  ),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text('Cancel'),
+                ),
+              ],
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+
+  Widget _buildInfoSection(String sectionTitle, Map<String, String> info) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          sectionTitle,
+          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+        ),
+        const SizedBox(height: 5),
+        ...info.entries.map(
+              (entry) => Row(
+            children: [
+              Text('${entry.key}: '),
+              const SizedBox(width: 5),
+              Text(entry.value, style: const TextStyle(fontWeight: FontWeight.bold)),
+            ],
+          ),
+        ),
+        const Divider(),
+      ],
     );
   }
 
