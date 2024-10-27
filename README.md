@@ -7,6 +7,7 @@ BussPass is a mobile application built with Flutter that provides a comprehensiv
 
 ### Project Structure
 ```
+main.dart  
 /pages
   ├── booking.dart         # Booking screen implementation
   ├── home_screen.dart     # Main home screen with featured content
@@ -14,7 +15,7 @@ BussPass is a mobile application built with Flutter that provides a comprehensiv
   ├── menu_screen.dart     # Navigation menu implementation
   ├── profile_screen.dart  # User profile management
   ├── tickets_screen.dart  # Ticket history and management
-  └── main.dart           # Application entry point and navigation setup
+  └──          # Application entry point and navigation setup
 ```
 
 ### Core Components
