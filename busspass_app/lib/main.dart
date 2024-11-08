@@ -4,8 +4,25 @@ import 'pages/booking.dart';
 import 'pages/login_page.dart';
 import 'pages/tickets_screen.dart';
 import 'pages/profile_screen.dart';
+import 'package:flutter/foundation.dart';
+//firebase imports
+import 'package:firebase_core/firebase_core.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  if (kIsWeb) {
+    await Firebase.initializeApp(
+        options: FirebaseOptions(
+            apiKey: "AIzaSyC20fzUzXAMkeb4JN7h_7quL9dmri4f100",
+            authDomain: "busspass-aa1f9.firebaseapp.com",
+            projectId: "busspass-aa1f9",
+            storageBucket: "busspass-aa1f9.firebasestorage.app",
+            messagingSenderId: "893472098723",
+            appId: "1:893472098723:web:6490e78d2cfa51cb9a7216"));
+  } else {
+    await Firebase.initializeApp();
+  }
+
   runApp(const MyApp());
 }
 
@@ -53,7 +70,8 @@ class _MainScreenState extends State<MainScreen> {
         type: BottomNavigationBarType.fixed,
         backgroundColor: Colors.blue[900], // Dark blue background
         selectedItemColor: Colors.white, // White color for selected item
-        unselectedItemColor: Colors.grey[300], // Light grey for unselected items
+        unselectedItemColor:
+            Colors.grey[300], // Light grey for unselected items
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
         items: const [
