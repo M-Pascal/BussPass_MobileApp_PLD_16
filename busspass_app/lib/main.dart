@@ -12,17 +12,16 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   if (kIsWeb) {
     await Firebase.initializeApp(
-        options: FirebaseOptions(
-            apiKey: "AIzaSyC20fzUzXAMkeb4JN7h_7quL9dmri4f100",
-            authDomain: "busspass-aa1f9.firebaseapp.com",
-            projectId: "busspass-aa1f9",
-            storageBucket: "busspass-aa1f9.firebasestorage.app",
-            messagingSenderId: "893472098723",
-            appId: "1:893472098723:web:6490e78d2cfa51cb9a7216"));
+        options: const FirebaseOptions(
+            apiKey: "AIzaSyA9mI47tI-7gYJOhgnNDADqkQ7ZV35QUiY",
+            authDomain: "buss-pass-6bda1.firebaseapp.com",
+            projectId: "buss-pass-6bda1",
+            storageBucket: "buss-pass-6bda1.firebasestorage.app",
+            messagingSenderId: "617500355829",
+            appId: "1:617500355829:web:df10e7c1c616b9e20669bc"));
   } else {
     await Firebase.initializeApp();
   }
-
   runApp(const MyApp());
 }
 
@@ -31,9 +30,9 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: const LoginPage(),
+      home: LoginPage(),
     );
   }
 }

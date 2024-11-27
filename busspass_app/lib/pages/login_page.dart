@@ -1,5 +1,7 @@
 import 'package:busspass_app/main.dart';
+import 'package:busspass_app/pages/register.dart';
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -57,7 +59,8 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                       ),
                     ),
-                    const SizedBox(height: 20), // Space before login/register tabs
+                    const SizedBox(
+                        height: 20), // Space before login/register tabs
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -89,7 +92,8 @@ class _LoginPageState extends State<LoginPage> {
                             ],
                           ),
                         ),
-                        const SizedBox(width: 20), // Space between Login and Register
+                        const SizedBox(
+                            width: 20), // Space between Login and Register
                         GestureDetector(
                           onTap: () {
                             setState(() {
@@ -98,14 +102,23 @@ class _LoginPageState extends State<LoginPage> {
                           },
                           child: Column(
                             children: [
-                              Text(
-                                'Register',
-                                style: TextStyle(
-                                  fontSize: 18,
-                                  color: !_isLoginSelected
-                                      ? Colors.blue
-                                      : Colors.black,
-                                  fontWeight: FontWeight.bold,
+                              GestureDetector(
+                                onTap: () {
+                                  Navigator.pushReplacement(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => RegisterPage(),
+                                      ));
+                                },
+                                child: Text(
+                                  'Register',
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    color: !_isLoginSelected
+                                        ? Colors.blue
+                                        : Colors.black,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                                 ),
                               ),
                               if (!_isLoginSelected)
@@ -152,7 +165,9 @@ class _LoginPageState extends State<LoginPage> {
                   prefixIcon: const Icon(Icons.lock),
                   suffixIcon: IconButton(
                     icon: Icon(
-                      _obscurePassword ? Icons.visibility_off : Icons.visibility,
+                      _obscurePassword
+                          ? Icons.visibility_off
+                          : Icons.visibility,
                     ),
                     onPressed: () {
                       setState(() {
@@ -194,22 +209,51 @@ class _LoginPageState extends State<LoginPage> {
                 ],
               ),
               const SizedBox(height: 20),
+
               Center(
                 child: ElevatedButton(
-                  onPressed: () {
+                  onPressed: () async {
                     if (_formKey.currentState?.validate() ?? false) {
-                      // Perform login action if form is valid
+                      try {
+                        // Fetch user data from Firestore
+                        CollectionReference collRef =
+                            FirebaseFirestore.instance.collection('users');
+                        QuerySnapshot snapshot = await collRef
+                            .where('email', isEqualTo: _emailController.text)
+                            .where('password',
+                                isEqualTo: _passwordController
+                                    .text) // For security, use hashed passwords
+                            .get();
+
+                        if (snapshot.docs.isNotEmpty) {
+                          // Login successful
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const MainScreen()),
+                          );
+                        } else {
+                          // Login failed
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                                content: Text('Invalid email or password')),
+                          );
+                        }
+                      } catch (e) {
+                        // Handle Firestore errors
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text('Error logging in: $e')),
+                        );
+                      }
                     }
-                    Navigator.push(context,
-                    MaterialPageRoute(builder: (context)=> const MainScreen()
-                    )
-                    );
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.blue[900], // Button color
-                    padding: const EdgeInsets.symmetric(horizontal: 100, vertical: 15),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 100, vertical: 15),
                   ),
-                  child: const Text('Login',
+                  child: const Text(
+                    'Login',
                     style: TextStyle(color: Colors.white),
                   ),
                 ),
