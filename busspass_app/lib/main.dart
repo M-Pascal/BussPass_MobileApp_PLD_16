@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart'; // Import for Firebase initialization
 import 'firebase_options.dart'; // Import the generated Firebase options
+import 'package:firebase_auth/firebase_auth.dart';
 import 'pages/home_screen.dart';
 import 'pages/booking.dart';
 import 'pages/login_page.dart';
@@ -17,18 +18,32 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  // Run the app after Firebase initialization
-  runApp(const MyApp());
+  // Check if the user is already logged in via Firebase
+  FirebaseAuth.instance.authStateChanges().listen((User? user) {
+    if (user != null) {
+      // User is already signed in, navigate to MainScreen
+      runApp(MyApp(home: const MainScreen()));
+    } else {
+      // User is not signed in, navigate to LoginPage
+      runApp(MyApp(home: const LoginPage()));
+    }
+  });
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final Widget home;
+  const MyApp({super.key, required this.home});
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: LoginPage(), // Set your starting page here
+      title: 'BussPass App',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+        visualDensity: VisualDensity.adaptivePlatformDensity,
+      ),
+      home: home,
     );
   }
 }

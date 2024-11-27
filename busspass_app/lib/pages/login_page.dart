@@ -290,40 +290,31 @@ class _LoginPageState extends State<LoginPage> {
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.red[700],
                     padding: const EdgeInsets.symmetric(
-                        horizontal: 20, vertical: 15),
+                        horizontal: 100, vertical: 15),
                   ),
                 ),
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 10),
               Center(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Text('Forgot your password?'),
-                    TextButton(
-                      onPressed: _forgotPassword,
-                      child: const Text('Reset here'),
-                    ),
-                  ],
+                child: TextButton(
+                  onPressed: _forgotPassword, // Forgot password functionality
+                  child: const Text('Forgot Password?'),
                 ),
               ),
               const SizedBox(height: 20),
               Center(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Text('Don\'t have an account?'),
-                    TextButton(
-                      onPressed: () {
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const SignupPage()),
-                        );
-                      },
-                      child: const Text('Sign up'),
-                    ),
-                  ],
+                child: TextButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const SignupPage()),
+                    );
+                  },
+                  child: const Text(
+                    'Don’t have an account? Sign Up',
+                    style: TextStyle(color: Colors.blue),
+                  ),
                 ),
               ),
             ],
