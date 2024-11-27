@@ -16,99 +16,99 @@ class HomeScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text(
+                        'BussPass',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.menu, color: Colors.white),
+                        onPressed: () {},
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 8),
                   const Text(
-                    'BussPass',
+                    'Travel when its convenient for you',
                     style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
+                      color: Colors.white70,
+                      fontSize: 14,
                     ),
                   ),
-                  IconButton(
-                    icon: const Icon(Icons.menu, color: Colors.white),
-                    onPressed: () {},
+                  const SizedBox(height: 16),
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 12),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: const TextField(
+                      decoration: InputDecoration(
+                        hintText: 'Where to...',
+                        border: InputBorder.none,
+                        suffixIcon: Icon(Icons.search),
+                      ),
+                    ),
                   ),
                 ],
               ),
-              const SizedBox(height: 8),
-              const Text(
-                'Travel when its convenient for you',
-              style: TextStyle(
-              color: Colors.white70,
-                fontSize: 14,
-              ),
             ),
-            const SizedBox(height: 16),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 12),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: const TextField(
-                decoration: InputDecoration(
-                  hintText: 'Where to...',
-                  border: InputBorder.none,
-                  suffixIcon: Icon(Icons.search),
+
+            // Explore Section
+            Expanded(
+              child: SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        'Explore',
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      const Text(
+                        'Plan your future trip by region',
+                        style: TextStyle(
+                          color: Colors.grey,
+                          fontSize: 14,
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                      _buildExploreCard(
+                        'North',
+                        'Book your next trip to the North.\nMissing Someone? Visit them',
+                        'assets/North.jpg',
+                      ),
+                      const SizedBox(height: 16),
+                      _buildExploreCard(
+                        'East',
+                        'Feeling adventurous today?\nWho knows what you can find on the road',
+                        'assets/South.webp',
+                      ),
+                      const SizedBox(height: 16),
+                      _buildExploreCard(
+                        'West',
+                        'Explore the western region',
+                        'assets/West.jpeg',
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
           ],
         ),
       ),
-
-      // Explore Section
-      Expanded(
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text(
-                  'Explore',
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(height: 8),
-                const Text(
-                  'Plan your future trip by region',
-                  style: TextStyle(
-                    color: Colors.grey,
-                    fontSize: 14,
-                  ),
-                ),
-                const SizedBox(height: 16),
-                _buildExploreCard(
-                  'North',
-                  'Book your next trip to the North.\nMissing Someone? Visit them',
-                  'assets/North.jpg',
-                ),
-                const SizedBox(height: 16),
-                _buildExploreCard(
-                  'East',
-                  'Feeling adventurous today?\nWho knows what you can find on the road',
-                  'assets/South.webp',
-                ),
-                const SizedBox(height: 16),
-                _buildExploreCard(
-                  'West',
-                  'Explore the western region',
-                  'assets/West.jpeg',
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-      ],
-    ),
-    ),
     );
   }
 

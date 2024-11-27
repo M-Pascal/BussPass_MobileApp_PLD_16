@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-
 // import 'package:google_fonts/google_fonts.dart';
 
 // void main() {
@@ -14,7 +13,7 @@ import 'package:flutter/material.dart';
 //     return MaterialApp(
 //       debugShowCheckedModeBanner: false, // Removes the debug banner
 //       home: BusspassHome(),
-//       routes: {
+//       routes: {z
 //         '/profile': (context) => const ProfileScreen(),
 //       },
 //     );
@@ -35,12 +34,15 @@ class BusspassHome extends StatelessWidget {
             children: [
               // Top half with blue background and avatar
               Container(
-                color: Colors.blue[900], // Dark blue color for top half background
+                color:
+                    Colors.blue[900], // Dark blue color for top half background
                 width: double.infinity,
                 padding: const EdgeInsets.symmetric(vertical: 20.0),
                 child: Column(
                   children: [
-                    const SizedBox(height: 80), // Adjusted spacing to move the content down
+                    const SizedBox(
+                        height:
+                            80), // Adjusted spacing to move the content down
                     // Smaller square Avatar with thinner outline
                     Container(
                       width: 60, // Reduced size
@@ -51,13 +53,16 @@ class BusspassHome extends StatelessWidget {
                           color: Colors.white, // White square outline
                           width: 2, // Reduced border width
                         ),
-                        borderRadius: BorderRadius.circular(8), // Square with slightly rounded corners
+                        borderRadius: BorderRadius.circular(
+                            8), // Square with slightly rounded corners
                       ),
                       child: ClipRRect(
-                        borderRadius: BorderRadius.circular(8), // Ensures the image respects the corners
+                        borderRadius: BorderRadius.circular(
+                            8), // Ensures the image respects the corners
                         child: Image.network(
                           'https://your-new-avatar-url.com/avatar.png', // Change to your new avatar image URL
-                          fit: BoxFit.cover, // Ensures the image covers the entire area
+                          fit: BoxFit
+                              .cover, // Ensures the image covers the entire area
                           errorBuilder: (context, error, stackTrace) {
                             // Fallback in case of image load failure
                             return const Icon(
@@ -75,7 +80,8 @@ class BusspassHome extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
-                        color: Colors.white, // White text to match the blue background
+                        color: Colors
+                            .white, // White text to match the blue background
                       ),
                     ),
                     const Text(
@@ -112,64 +118,70 @@ class BusspassHome extends StatelessWidget {
                             // Navigate to Profile screen
                             Navigator.push(
                                 context,
-                                MaterialPageRoute(builder: (context)=>const ProfileScreen())
-                            );
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        const ProfileScreen()));
                           },
                         ),
                         const Divider(),
 
                         // Adjusted Logout Button position upwards but not too close to Profile
-                        const SizedBox(height: 20), // Space between Profile and Log out
+                        const SizedBox(
+                            height: 20), // Space between Profile and Log out
                         SizedBox(
                           width: 316, // Width based on your design
                           height: 45, // Height based on your design
                           child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.blue[900], // Dark blue button color
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(5),
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor:
+                                    Colors.blue[900], // Dark blue button color
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(5),
+                                ),
                               ),
-                            ),
-                            onPressed: () {
-                              // Add your logout logic here
-                            },
-                            child:TextButton(
                               onPressed: () {
-                                // Your onPressed function logic here
-                                print("Logout button pressed");
+                                // Add your logout logic here
                               },
-                              style: TextButton.styleFrom(
-                                padding: EdgeInsets.zero, // Remove default padding if needed
-                              ),
                               child: TextButton(
-                                onPressed: () {
-                                 Navigator.pop(context) ;
-                                 Navigator.pop(context);
-                                },
-                                style: TextButton.styleFrom(
-                                  padding: EdgeInsets.zero, // Remove default padding if needed
-                                ),
-                                child: const Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Icon(
-                                      Icons.logout,
-                                      color: Colors.white, // White logout icon
+                                  onPressed: () {
+                                    // Your onPressed function logic here
+                                    print("Logout button pressed");
+                                  },
+                                  style: TextButton.styleFrom(
+                                    padding: EdgeInsets
+                                        .zero, // Remove default padding if needed
+                                  ),
+                                  child: TextButton(
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                      Navigator.pop(context);
+                                    },
+                                    style: TextButton.styleFrom(
+                                      padding: EdgeInsets
+                                          .zero, // Remove default padding if needed
                                     ),
-                                    SizedBox(width: 8), // Space between icon and text
-                                    Text(
-                                      'Log out',
-                                      style: TextStyle(
-                                        color: Colors.white, // White text color
-                                      ),
+                                    child: const Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Icon(
+                                          Icons.logout,
+                                          color:
+                                              Colors.white, // White logout icon
+                                        ),
+                                        SizedBox(
+                                            width:
+                                                8), // Space between icon and text
+                                        Text(
+                                          'Log out',
+                                          style: TextStyle(
+                                            color: Colors
+                                                .white, // White text color
+                                          ),
+                                        ),
+                                      ],
                                     ),
-                                  ],
-                                ),
-                              )
-
-                            )
-
-                          ),
+                                  ))),
                         ),
                       ],
                     ),
@@ -218,7 +230,8 @@ class BusspassHome extends StatelessWidget {
             child: Container(
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: Colors.blue[900], // Optional: background color for better visibility
+                color: Colors.blue[
+                    900], // Optional: background color for better visibility
               ),
               child: IconButton(
                 icon: const Icon(
@@ -279,17 +292,17 @@ class ProfileScreen extends StatelessWidget {
                       actions: [
                         TextButton(
                           onPressed: () {
-                            Navigator.pop(context);// Close the dialog
+                            Navigator.pop(context); // Close the dialog
                           },
                           child: const Text('Cancel'),
                         ),
                         TextButton(
                           onPressed: () {
                             int count = 0;
-                            Navigator.of(context).popUntil((route) => count++ == 4);
+                            Navigator.of(context)
+                                .popUntil((route) => count++ == 4);
                             // Perform account deletion logic hereL
                           },
-
                           child: const Text('Delete'),
                         ),
                       ],

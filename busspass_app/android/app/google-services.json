@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "104676529768",
+    "project_id": "busspass-33fab",
+    "storage_bucket": "busspass-33fab.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:104676529768:android:b8f412c4e12cce513a8ddd",
+        "android_client_info": {
+          "package_name": "com.example.busspass_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCqvTQEGs3Z0vxjpQF5H6qakkYD3khxyxE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

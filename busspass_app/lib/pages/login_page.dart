@@ -1,5 +1,10 @@
 import 'package:busspass_app/main.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart'; // For Google Sign-In
+import 'signup_page.dart';
+import 'package:shared_preferences/shared_preferences.dart'; // For SharedPreferences
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -9,12 +14,160 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  bool _rememberPassword = false;
   bool _obscurePassword = true;
+  bool _rememberMe = false; // For Remember Me checkbox
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
-  bool _isLoginSelected = true; // To toggle between Login and Register
+
+  @override
+  void initState() {
+    super.initState();
+    _loadCredentials(); // Load saved credentials if any
+  }
+
+  // Load saved email and password from SharedPreferences
+  _loadCredentials() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _emailController.text = prefs.getString('email') ?? '';
+      _passwordController.text = prefs.getString('password') ?? '';
+      _rememberMe = prefs.getBool('rememberMe') ?? false;
+    });
+  }
+
+  // Save email, password, and rememberMe preference to SharedPreferences
+  _saveCredentials() async {
+    if (_rememberMe) {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.setString('email', _emailController.text);
+      prefs.setString('password', _passwordController.text);
+      prefs.setBool('rememberMe', true);
+    } else {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.remove('email');
+      prefs.remove('password');
+      prefs.setBool('rememberMe', false);
+    }
+  }
+
+  // Login function with Firebase Authentication
+  Future<void> _login() async {
+    try {
+      // Sign in using Firebase Authentication
+      UserCredential userCredential =
+          await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: _emailController.text,
+        password: _passwordController.text,
+      );
+
+      // After successful login, fetch the user data from Firestore
+      User? user = userCredential.user;
+      if (user != null) {
+        // Fetch user data from Firestore
+        DocumentSnapshot userDoc = await FirebaseFirestore.instance
+            .collection('users')
+            .doc(user.uid)
+            .get();
+
+        if (userDoc.exists) {
+          var userData = userDoc.data() as Map<String, dynamic>;
+          print(
+              'User Name: ${userData['first_name']} ${userData['last_name']}');
+          print('User Email: ${userData['email']}');
+          print('User Phone: ${userData['phone']}');
+        }
+
+        // Show success message
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text('Login Successful'),
+        ));
+
+        // Save the credentials if Remember Me is checked
+        _saveCredentials();
+
+        // Navigate to main screen after successful login
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const MainScreen()),
+        );
+      }
+    } on FirebaseAuthException catch (e) {
+      String message = 'Something went wrong';
+      if (e.code == 'user-not-found') {
+        message = 'No user found for that email';
+      } else if (e.code == 'wrong-password') {
+        message = 'Wrong password provided';
+      }
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(message)));
+    }
+  }
+
+  // Google Sign-In function
+  Future<void> _googleSignIn() async {
+    try {
+      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+      if (googleUser == null) {
+        // The user canceled the sign-in
+        return;
+      }
+
+      final GoogleSignInAuthentication googleAuth =
+          await googleUser.authentication;
+
+      final OAuthCredential credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
+
+      UserCredential userCredential =
+          await FirebaseAuth.instance.signInWithCredential(credential);
+
+      User? user = userCredential.user;
+      if (user != null) {
+        // Check if the user exists in Firestore; if not, add them
+        DocumentReference userDoc =
+            FirebaseFirestore.instance.collection('users').doc(user.uid);
+
+        await userDoc.set({
+          'first_name': user.displayName?.split(' ').first ?? 'N/A',
+          'last_name': user.displayName?.split(' ').last ?? 'N/A',
+          'email': user.email,
+          'phone': user.phoneNumber,
+        }, SetOptions(merge: true));
+
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text('Google Sign-In Successful'),
+        ));
+
+        // Navigate to main screen after successful login
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const MainScreen()),
+        );
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text('Error during Google Sign-In: $e'),
+      ));
+    }
+  }
+
+  // Password reset function for Forgot Password
+  Future<void> _forgotPassword() async {
+    try {
+      await FirebaseAuth.instance
+          .sendPasswordResetEmail(email: _emailController.text);
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text('Password reset email sent. Please check your inbox.'),
+      ));
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text('Error sending password reset email: $e'),
+      ));
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -27,117 +180,42 @@ class _LoginPageState extends State<LoginPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(height: 60), // Top space
+              const SizedBox(height: 60),
               Center(
                 child: Column(
                   children: [
                     Image.asset('assets/bus_image.png', height: 100),
                     const SizedBox(height: 20),
                     const Text(
-                      'Login',
+                      'Login to Your Account',
                       style: TextStyle(
                         fontSize: 28,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    const SizedBox(height: 10), // Space between title and terms
+                    const SizedBox(height: 10),
                     const Text(
-                      'By signing in you are agreeing our',
+                      'Please enter your credentials.',
                       style: TextStyle(fontSize: 14),
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        // Navigate to terms page
-                      },
-                      child: const Text(
-                        'Term and privacy policy',
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: Colors.blue,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 20), // Space before login/register tabs
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              _isLoginSelected = true;
-                            });
-                          },
-                          child: Column(
-                            children: [
-                              Text(
-                                'Login',
-                                style: TextStyle(
-                                  fontSize: 18,
-                                  color: _isLoginSelected
-                                      ? Colors.blue
-                                      : Colors.black,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              if (_isLoginSelected)
-                                Container(
-                                  height: 2,
-                                  width: 50,
-                                  color: Colors.blue,
-                                  margin: const EdgeInsets.only(top: 5),
-                                ),
-                            ],
-                          ),
-                        ),
-                        const SizedBox(width: 20), // Space between Login and Register
-                        GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              _isLoginSelected = false;
-                            });
-                          },
-                          child: Column(
-                            children: [
-                              Text(
-                                'Register',
-                                style: TextStyle(
-                                  fontSize: 18,
-                                  color: !_isLoginSelected
-                                      ? Colors.blue
-                                      : Colors.black,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              if (!_isLoginSelected)
-                                Container(
-                                  height: 2,
-                                  width: 50,
-                                  color: Colors.blue,
-                                  margin: const EdgeInsets.only(top: 5),
-                                ),
-                            ],
-                          ),
-                        ),
-                      ],
                     ),
                   ],
                 ),
               ),
-              const SizedBox(height: 30), // Space between form and tabs
+              const SizedBox(height: 30),
               TextFormField(
                 controller: _emailController,
                 keyboardType: TextInputType.emailAddress,
                 decoration: const InputDecoration(
                   labelText: 'Email Address',
-                  hintText: 'Enter your email',
+                  hintText: 'Enter your email address',
                   prefixIcon: Icon(Icons.email),
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Please enter your email';
+                    return 'Please enter your email address';
                   }
                   if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value)) {
-                    return 'Please enter a valid email';
+                    return 'Please enter a valid email address';
                   }
                   return null;
                 },
@@ -145,14 +223,16 @@ class _LoginPageState extends State<LoginPage> {
               const SizedBox(height: 20),
               TextFormField(
                 controller: _passwordController,
-                obscureText: _obscurePassword,
+                obscureText: !_obscurePassword,
                 decoration: InputDecoration(
                   labelText: 'Password',
                   hintText: 'Enter your password',
                   prefixIcon: const Icon(Icons.lock),
                   suffixIcon: IconButton(
                     icon: Icon(
-                      _obscurePassword ? Icons.visibility_off : Icons.visibility,
+                      _obscurePassword
+                          ? Icons.visibility
+                          : Icons.visibility_off,
                     ),
                     onPressed: () {
                       setState(() {
@@ -170,67 +250,78 @@ class _LoginPageState extends State<LoginPage> {
               ),
               const SizedBox(height: 20),
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Row(
-                    children: [
-                      Checkbox(
-                        value: _rememberPassword,
-                        onChanged: (value) {
-                          setState(() {
-                            _rememberPassword = value ?? false;
-                          });
-                        },
-                      ),
-                      const Text('Remember password'),
-                    ],
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      // Add forgot password logic
+                  Checkbox(
+                    value: _rememberMe,
+                    onChanged: (value) {
+                      setState(() {
+                        _rememberMe = value ?? false;
+                      });
                     },
-                    child: const Text('Forget password'),
                   ),
+                  const Text('Remember Me'),
                 ],
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 30),
               Center(
                 child: ElevatedButton(
                   onPressed: () {
                     if (_formKey.currentState?.validate() ?? false) {
-                      // Perform login action if form is valid
+                      _login(); // Call the login function
                     }
-                    Navigator.push(context,
-                    MaterialPageRoute(builder: (context)=> const MainScreen()
-                    )
-                    );
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.blue[900], // Button color
-                    padding: const EdgeInsets.symmetric(horizontal: 100, vertical: 15),
+                    backgroundColor: Colors.blue[900],
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 100, vertical: 15),
                   ),
-                  child: const Text('Login',
+                  child: const Text(
+                    'Login',
                     style: TextStyle(color: Colors.white),
                   ),
                 ),
               ),
               const SizedBox(height: 20),
               Center(
-                child: Column(
+                child: ElevatedButton.icon(
+                  onPressed: _googleSignIn, // Google Sign-In
+                  icon: const Icon(Icons.login),
+                  label: const Text('Sign In with Google'),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.red[700],
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 20, vertical: 15),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 20),
+              Center(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Text('or'),
-                    const SizedBox(height: 10),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Text("Don't have an account?"),
-                        TextButton(
-                          onPressed: () {
-                            // Add sign up logic here
-                          },
-                          child: const Text('Sign Up'),
-                        ),
-                      ],
+                    const Text('Forgot your password?'),
+                    TextButton(
+                      onPressed: _forgotPassword,
+                      child: const Text('Reset here'),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 20),
+              Center(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Text('Don\'t have an account?'),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const SignupPage()),
+                        );
+                      },
+                      child: const Text('Sign up'),
                     ),
                   ],
                 ),
